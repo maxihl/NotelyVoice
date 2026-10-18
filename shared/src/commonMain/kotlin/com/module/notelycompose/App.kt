@@ -45,6 +45,7 @@ import com.module.notelycompose.transcription.TranscriptionScreen
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import androidx.compose.runtime.LaunchedEffect
 
 object Arguments {
     const val NOTE_ID_PARAM = "noteId"
@@ -98,6 +99,11 @@ fun NoteAppRoot(
     sharedAudioUri: String?
 ) {
     val navController = rememberNavController()
+    LaunchedEffect(sharedAudioUri) {
+        if (!sharedAudioUri.isNullOrBlank()) {
+            navController.navigateSingleTop(Routes.Details(null))
+        }
+    }
     NavHost(
         navController,
         startDestination = Routes.Home::class,
