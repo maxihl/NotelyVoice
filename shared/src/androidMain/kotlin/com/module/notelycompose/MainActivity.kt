@@ -16,13 +16,35 @@ import com.module.notelycompose.onboarding.data.PreferencesRepository
 import com.module.notelycompose.platform.Theme
 import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
+import android.content.Intent
+import androidx.core.content.IntentCompat
+import androidx.compose.runtime.mutableStateOf
 
 class MainActivity : AppCompatActivity() {
+    private var sharedAudioUri = mutableStateOf<String?>(null)
+    private fun captureSharedAudio(intent: Intent?) {
+        if (intent?.action != Intent.ACTION_SEND ||
+                intent.type?.startsWith("audio/") != true
+           ) return
+        sharedAudioUri.value = IntentCompat.getParcelableExtra(
+            intent,
+            Intent.EXTRA_STREAM,
+            Uri::class.java
+        )?.toString()
+    }
+    
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        captureSharedAudio(intent)
+    }
+    
     private val fileSaverLauncherHolder by inject<FileSaverLauncherHolder>()
     private val folderPickerLauncherHolder by inject<FolderPickerLauncherHolder>()
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        captureSharedAudio(intent)
         injectLauncher()
         setupFileSaverLauncher()
         setupFolderPickerLauncher()
