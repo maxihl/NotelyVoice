@@ -99,6 +99,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun NoteDetailScreen(
     noteId: String,
+    sharedAudioUri: String? = null,
     navigateBack: () -> Unit,
     navigateToRecorder: (noteId: String) -> Unit,
     navigateToTranscription: () -> Unit,
@@ -131,6 +132,12 @@ fun NoteDetailScreen(
     var showExistingRecordConfirmDialog by remember { mutableStateOf(false) }
     var showCopiedTooltip by remember { mutableStateOf(false) }
     var isFabVisible by remember { mutableStateOf(true) }
+    LaunchedEffect(sharedAudioUri) {
+        if (!sharedAudioUri.isNullOrBlank()) {
+            audioPlayerViewModel.releasePlayer()
+            audioImportViewModel.importSharedAudio(sharedAudioUri)
+        }
+    }
 
     LaunchedEffect(Unit) {
         if (noteId.toLong() > 0L) {
