@@ -21,6 +21,11 @@ internal class AndroidFileManager(
     private var pickedAudioUri: Uri? = null
     private var pickedVideoUri: Uri? = null
 
+    override fun importSharedAudio(uri: String, onResult: () -> Unit) {
+        pickedAudioUri = Uri.parse(uri)
+        onResult()
+    }
+
     override fun launchAudioPicker(onResult: () -> Unit) {
         pickedAudioUri = null
 
