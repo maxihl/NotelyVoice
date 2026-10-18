@@ -55,7 +55,8 @@ object Arguments {
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 fun App(
-    preferencesRepository: PreferencesRepository = koinInject()
+    preferencesRepository: PreferencesRepository = koinInject(),
+    sharedAudioUri: String? = null
 ) {
     val uiMode by preferencesRepository.getTheme().collectAsState(Theme.SYSTEM.name)
     MyApplicationTheme(
@@ -84,8 +85,7 @@ fun App(
                         platformState = platformUiState
                     )
                 }
-
-                is OnboardingState.Completed -> NoteAppRoot(platformUiState)
+                is OnboardingState.Completed -> NoteAppRoot(platformUiState, sharedAudioUri)
             }
         }
     }
@@ -93,7 +93,10 @@ fun App(
 
 
 @Composable
-fun NoteAppRoot(platformUiState: PlatformUiState) {
+fun NoteAppRoot(
+    platformUiState: PlatformUiState,
+    sharedAudioUri: String?
+) {
     val navController = rememberNavController()
     NavHost(
         navController,
