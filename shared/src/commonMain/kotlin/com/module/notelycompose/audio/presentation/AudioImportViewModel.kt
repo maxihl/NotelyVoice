@@ -36,6 +36,34 @@ class AudioImportViewModel(
             _importingState.update { ImportingAudioState.Success(path) }
         }
     }
+    
+    internal fun importSharedAudio(uri: String) = fileManager.importSharedAudio(uri) {
+        viewModelScope.launch {
+            _importingState.update {
+                ImportingAudioState.Importing()
+            }
+
+            val path = fileManager.processPickedAudioToWav(
+                onProgress = { progress ->
+                    _importingState.update {
+                        ImportingAudioState.Importing(progress)
+                    }
+                }
+            )
+
+            if (path == null) {
+                _importingState.update {
+                    ImportingAudioState.Failure("Failed to import shared audio")
+                }
+                return@launch
+            }
+
+            _importingState.update {
+                ImportingAudioState.Success(path)
+            }
+        }
+    }
+    
 
     internal fun importVideo() = fileManager.launchVideoPicker {
         viewModelScope.launch {
