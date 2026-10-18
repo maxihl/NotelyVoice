@@ -378,7 +378,6 @@ fun NoteDetailScreen(
             showCopiedTooltip = true
         }
     }
-    3
     CopiedNotification(
         visible = showCopiedTooltip,
         onDismiss = {
