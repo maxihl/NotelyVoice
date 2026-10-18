@@ -364,7 +364,12 @@ fun NoteDetailScreen(
 
     ImportingAudioStateHost(
         state = importingState,
-        onSuccess = editorViewModel::onUpdateRecordingPath,
+        onSuccess = { path ->
+            editorViewModel.onUpdateRecordingPath(path)
+            if (!sharedAudioUri.isNullOrBlank()) {
+                downloaderViewModel.checkTranscriptionAvailability()
+            }
+        },
         onRelease = audioImportViewModel::releaseState
     )
 
