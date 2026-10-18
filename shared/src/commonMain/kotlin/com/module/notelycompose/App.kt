@@ -175,6 +175,7 @@ fun NoteAppRoot(
                 }
                 NoteDetailScreen(
                     noteId = route.noteId ?: DEFAULT_NOTE_ID,
+                    sharedAudioUri = sharedAudioUri,
                     navigateBack = { navController.popBackStack() },
                     navigateToRecorder = { noteId ->
                         navController.navigateSingleTop(Routes.Recorder(noteId))
