@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                 color = Color.Transparent,
                 darkIcons = !darkTheme
             )
-            App()
+            App(sharedAudioUri = sharedAudioUri.value)
         }
     }
 
